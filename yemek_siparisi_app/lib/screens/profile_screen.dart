@@ -5,6 +5,7 @@ import 'coupons_screen.dart';
 import 'notifications_screen.dart';
 import 'admin_panel_screen.dart';
 import 'support_screen.dart';
+import '../main.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String userName;
@@ -62,7 +63,12 @@ class ProfileScreen extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const SupportScreen()));
                   }),
                   _buildMenuItem(context, 'Çıkış Yap', Icons.logout, () {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    // Tüm sayfaları temizle ve giriş ekranına dön
+                    Navigator.pushAndRemoveUntil(
+                      context, 
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      (route) => false,
+                    );
                   }, isDestructive: true),
                 ],
               ),
