@@ -47,22 +47,15 @@ namespace YemekSiparisi.Api.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // HOŞ GELDİN KUPONLARI TANIMLA
+            // HOŞ GELDİN KUPONU TANIMLA
             var coupons = new List<Coupon>
             {
                 new Coupon { 
                     UserId = user.Id, 
-                    Code = "DUMANLI50", 
-                    Description = "İlk Siparişe Özel %50 İndirim", 
+                    Code = "BEDAVA2344", 
+                    Description = "Tüm Siparişlerde Geçerli %50 İndirim", 
                     DiscountType = "Percentage", 
                     DiscountValue = 50 
-                },
-                new Coupon { 
-                    UserId = user.Id, 
-                    Code = "LEZZET25", 
-                    Description = "Tüm Siparişlerde Geçerli 25 TL İndirim", 
-                    DiscountType = "Flat", 
-                    DiscountValue = 25 
                 }
             };
 
@@ -114,6 +107,21 @@ namespace YemekSiparisi.Api.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { Message = "Profil başarıyla güncellendi.", Province = user.Province, District = user.District, Neighborhood = user.Neighborhood });
+        }
+
+        // KULLANICININ KUPONLARINI GETİR
+        [HttpGet("my-coupons")]
+        [Authorize]
+        public async Task<IActionResult> GetMyCoupons()
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+
+            var coupons = await _context.Coupons
+                .Where(c => c.UserId == userId && !c.IsUsed)
+                .ToListAsync();
+
+            return Ok(coupons);
         }
 
         private string GenerateJwtToken(User user)

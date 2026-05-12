@@ -347,4 +347,25 @@ class ApiService {
       return [];
     }
   }
+
+  // KUPONLARI GETİR
+  static Future<List<dynamic>> getCoupons(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$authUrl/my-coupons'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      print('Kupon hatası: $e');
+      return [];
+    }
+  }
 }

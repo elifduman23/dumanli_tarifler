@@ -78,10 +78,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => OrdersScreen(token: widget.token)));
                   }),
                   _buildMenuItem(context, 'Kuponlarım', Icons.confirmation_number_outlined, () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const CouponsScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CouponsScreen(token: widget.token)));
                   }),
                   _buildMenuItem(context, 'Bildirimler', Icons.notifications_outlined, () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationsScreen(token: widget.token)));
                   }),
                   const SizedBox(height: 20),
                   const Divider(color: Colors.white12),
