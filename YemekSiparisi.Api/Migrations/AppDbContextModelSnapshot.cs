@@ -134,7 +134,7 @@ namespace YemekSiparisi.Api.Migrations
                         {
                             Id = 1,
                             Category = "Kebap",
-                            Description = "Zırh kıyması, közlenmiş biber ve domates ile.",
+                            Description = "Zırh kıyması, közlenmiş biber ile.",
                             DiscountPrice = 200m,
                             ImageUrl = "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500",
                             IsInStock = true,
@@ -146,7 +146,7 @@ namespace YemekSiparisi.Api.Migrations
                         {
                             Id = 2,
                             Category = "Kebap",
-                            Description = "Bol malzemeli çıtır Antep lahmacunu.",
+                            Description = "Çıtır Antep lahmacunu.",
                             DiscountPrice = 65m,
                             ImageUrl = "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500",
                             IsInStock = true,
@@ -158,7 +158,7 @@ namespace YemekSiparisi.Api.Migrations
                         {
                             Id = 3,
                             Category = "Pizza",
-                            Description = "Mozzarella, taze fesleğen ve domates sosu.",
+                            Description = "Mozzarella ve taze fesleğen.",
                             DiscountPrice = 149m,
                             ImageUrl = "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=500",
                             IsInStock = true,
@@ -169,14 +169,84 @@ namespace YemekSiparisi.Api.Migrations
                         new
                         {
                             Id = 4,
+                            Category = "Pizza",
+                            Description = "Bol malzemeli İtalyan usulü.",
+                            DiscountPrice = 190m,
+                            ImageUrl = "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
+                            IsInStock = true,
+                            Name = "Karışık Pizza",
+                            Price = 220m,
+                            RestaurantId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
                             Category = "Burger",
-                            Description = "180gr köfte, karamelize soğan ve cheddar.",
+                            Description = "180gr köfte ve cheddar.",
                             DiscountPrice = 199m,
                             ImageUrl = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500",
                             IsInStock = true,
                             Name = "Classic Burger",
                             Price = 220m,
                             RestaurantId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Category = "Burger",
+                            Description = "Özel soslu dev burger.",
+                            DiscountPrice = 240m,
+                            ImageUrl = "https://images.unsplash.com/photo-1550547660-d9450f859349?w=500",
+                            IsInStock = true,
+                            Name = "Dumanlı Special",
+                            Price = 280m,
+                            RestaurantId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Category = "Tatlı",
+                            Description = "Gaziantep usulü bol fıstıklı.",
+                            DiscountPrice = 120m,
+                            ImageUrl = "https://images.unsplash.com/photo-1519676867240-f03562e64548?w=500",
+                            IsInStock = true,
+                            Name = "Fıstıklı Baklava",
+                            Price = 150m,
+                            RestaurantId = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Category = "Tatlı",
+                            Description = "Fırınlanmış tam kıvamında.",
+                            ImageUrl = "https://images.unsplash.com/photo-1516684732162-798a0062be99?w=500",
+                            IsInStock = true,
+                            Name = "Sütlaç",
+                            Price = 70m,
+                            RestaurantId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Category = "Deniz Mahsulleri",
+                            Description = "Salata ve garnitür ile.",
+                            DiscountPrice = 290m,
+                            ImageUrl = "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500",
+                            IsInStock = true,
+                            Name = "Izgara Çupra",
+                            Price = 350m,
+                            RestaurantId = 5
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Category = "Yeşil Bahçe",
+                            Description = "Sağlıklı ve doyurucu.",
+                            ImageUrl = "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500",
+                            IsInStock = true,
+                            Name = "Kinoa Salatası",
+                            Price = 120m,
+                            RestaurantId = 6
                         });
                 });
 
@@ -286,7 +356,7 @@ namespace YemekSiparisi.Api.Migrations
                         {
                             Id = 1,
                             Address = "Çarşı Merkezi, No: 44",
-                            CreatedAt = new DateTime(2026, 5, 12, 12, 53, 35, 222, DateTimeKind.Local).AddTicks(4272),
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1873),
                             Description = "En lezzetli kebaplar ve lahmacunlar.",
                             LogoUrl = "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500",
                             Name = "Gaziantep Kebapçısı",
@@ -297,7 +367,7 @@ namespace YemekSiparisi.Api.Migrations
                         {
                             Id = 2,
                             Address = "Cumhuriyet Cad. No: 12",
-                            CreatedAt = new DateTime(2026, 5, 12, 12, 53, 35, 222, DateTimeKind.Local).AddTicks(4290),
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1896),
                             Description = "Gerçek odun ateşinde İtalyan pizzası.",
                             LogoUrl = "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
                             Name = "İtalyan Pizza Dünyası",
@@ -308,12 +378,45 @@ namespace YemekSiparisi.Api.Migrations
                         {
                             Id = 3,
                             Address = "Bahçelievler Mah. No: 7",
-                            CreatedAt = new DateTime(2026, 5, 12, 12, 53, 35, 222, DateTimeKind.Local).AddTicks(4293),
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1900),
                             Description = "Gurme burger ve özel soslar.",
                             LogoUrl = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500",
                             Name = "Dumanlı Burger",
                             OwnerId = 1,
                             Rating = 4.7000000000000002
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "Kanalboyu Cad. No: 21",
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1904),
+                            Description = "Geleneksel ve modern tatlılar.",
+                            LogoUrl = "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500",
+                            Name = "Tatlı Köşesi",
+                            OwnerId = 1,
+                            Rating = 4.9000000000000004
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Address = "Fahri Kayahan No: 88",
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1907),
+                            Description = "Taze balık ve deniz mahsulleri.",
+                            LogoUrl = "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500",
+                            Name = "Ege Deniz Restoran",
+                            OwnerId = 1,
+                            Rating = 4.5999999999999996
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Address = "İnönü Cad. No: 156",
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1911),
+                            Description = "Sağlıklı salatalar ve vegan seçenekler.",
+                            LogoUrl = "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500",
+                            Name = "Yeşil Bahçe",
+                            OwnerId = 1,
+                            Rating = 4.4000000000000004
                         });
                 });
 
@@ -361,7 +464,7 @@ namespace YemekSiparisi.Api.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2026, 5, 12, 9, 53, 35, 222, DateTimeKind.Utc).AddTicks(3959),
+                            CreatedAt = new DateTime(2026, 5, 12, 10, 2, 59, 95, DateTimeKind.Utc).AddTicks(1400),
                             District = "Battalgazi",
                             Email = "admin@dumanli.com",
                             FullName = "Sistem Yöneticisi",

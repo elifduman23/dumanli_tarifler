@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace YemekSiparisi.Api.Migrations
 {
     /// <inheritdoc />
@@ -189,6 +191,41 @@ namespace YemekSiparisi.Api.Migrations
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedAt", "District", "Email", "FullName", "Neighborhood", "PasswordHash", "Province", "Role" },
+                values: new object[] { 1, new DateTime(2026, 5, 12, 10, 2, 59, 95, DateTimeKind.Utc).AddTicks(1400), "Battalgazi", "admin@dumanli.com", "Sistem Yöneticisi", "Üniversite", "AQAAAAEAACcQAAAAEJ3y...", "Malatya", "Admin" });
+
+            migrationBuilder.InsertData(
+                table: "Restaurants",
+                columns: new[] { "Id", "Address", "CreatedAt", "Description", "LogoUrl", "Name", "OwnerId", "Rating" },
+                values: new object[,]
+                {
+                    { 1, "Çarşı Merkezi, No: 44", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1873), "En lezzetli kebaplar ve lahmacunlar.", "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500", "Gaziantep Kebapçısı", 1, 4.7999999999999998 },
+                    { 2, "Cumhuriyet Cad. No: 12", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1896), "Gerçek odun ateşinde İtalyan pizzası.", "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500", "İtalyan Pizza Dünyası", 1, 4.5 },
+                    { 3, "Bahçelievler Mah. No: 7", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1900), "Gurme burger ve özel soslar.", "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500", "Dumanlı Burger", 1, 4.7000000000000002 },
+                    { 4, "Kanalboyu Cad. No: 21", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1904), "Geleneksel ve modern tatlılar.", "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500", "Tatlı Köşesi", 1, 4.9000000000000004 },
+                    { 5, "Fahri Kayahan No: 88", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1907), "Taze balık ve deniz mahsulleri.", "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500", "Ege Deniz Restoran", 1, 4.5999999999999996 },
+                    { 6, "İnönü Cad. No: 156", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1911), "Sağlıklı salatalar ve vegan seçenekler.", "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500", "Yeşil Bahçe", 1, 4.4000000000000004 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MenuItems",
+                columns: new[] { "Id", "Category", "Description", "DiscountPrice", "ImageUrl", "IsInStock", "Name", "Price", "RestaurantId" },
+                values: new object[,]
+                {
+                    { 1, "Kebap", "Zırh kıyması, közlenmiş biber ile.", 200m, "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500", true, "Adana Kebap", 250m, 1 },
+                    { 2, "Kebap", "Çıtır Antep lahmacunu.", 65m, "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500", true, "Lahmacun", 80m, 1 },
+                    { 3, "Pizza", "Mozzarella ve taze fesleğen.", 149m, "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=500", true, "Margarita Pizza", 180m, 2 },
+                    { 4, "Pizza", "Bol malzemeli İtalyan usulü.", 190m, "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500", true, "Karışık Pizza", 220m, 2 },
+                    { 5, "Burger", "180gr köfte ve cheddar.", 199m, "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500", true, "Classic Burger", 220m, 3 },
+                    { 6, "Burger", "Özel soslu dev burger.", 240m, "https://images.unsplash.com/photo-1550547660-d9450f859349?w=500", true, "Dumanlı Special", 280m, 3 },
+                    { 7, "Tatlı", "Gaziantep usulü bol fıstıklı.", 120m, "https://images.unsplash.com/photo-1519676867240-f03562e64548?w=500", true, "Fıstıklı Baklava", 150m, 4 },
+                    { 8, "Tatlı", "Fırınlanmış tam kıvamında.", null, "https://images.unsplash.com/photo-1516684732162-798a0062be99?w=500", true, "Sütlaç", 70m, 4 },
+                    { 9, "Deniz Mahsulleri", "Salata ve garnitür ile.", 290m, "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500", true, "Izgara Çupra", 350m, 5 },
+                    { 10, "Yeşil Bahçe", "Sağlıklı ve doyurucu.", null, "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500", true, "Kinoa Salatası", 120m, 6 }
                 });
 
             migrationBuilder.CreateIndex(
