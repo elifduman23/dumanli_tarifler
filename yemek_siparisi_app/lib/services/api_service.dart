@@ -1,0 +1,238 @@
+import 'dart:io';
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
+class ApiService {
+  static String get baseUrl {
+    if (kIsWeb) return 'http://localhost:5000/api';
+    if (Platform.isAndroid) return 'http://10.0.2.2:5000/api';
+    return 'http://localhost:5000/api';
+  }
+  static String get authUrl => '$baseUrl/auth';
+
+  // KAYIT OL
+  static Future<Map<String, dynamic>> register(String fullName, String email, String password, {String? province, String? district, String? neighborhood}) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$authUrl/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'FullName': fullName,
+          'Email': email,
+          'Password': password,
+          'Province': province,
+          'District': district,
+          'Neighborhood': neighborhood
+        }),
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return {'success': true, 'message': 'Kayıt başarılı.'};
+      } else {
+        final error = jsonDecode(response.body);
+        return {'success': false, 'message': error['message'] ?? 'Kayıt başarısız.'};
+      }
+    } catch (e) {
+      return {'success': false, 'message': 'Bağlantı hatası: $e'};
+    }
+  }
+
+  // GİRİŞ YAP
+  static Future<Map<String, dynamic>> login(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$authUrl/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return {'success': true, 'data': jsonDecode(response.body)};
+      } else {
+        return {'success': false, 'message': 'E-posta veya şifre hatalı.'};
+      }
+    } catch (e) {
+      return {'success': false, 'message': 'Bağlantı hatası: $e'};
+    }
+  }
+
+  // TÜM RESTORANLARI GETİR
+  static Future<List<dynamic>> getRestaurants() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/Restaurant'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      print('Restoran getirme hatası: $e');
+      return [];
+    }
+  }
+
+  // RESTORAN DETAYI GETİR
+  static Future<Map<String, dynamic>?> getRestaurantDetails(int id) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/Restaurant/$id'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // SİPARİŞ OLUŞTUR (VERİTABANINA KAYDET)
+  static Future<Map<String, dynamic>> createOrder(int restaurantId, List<Map<String, dynamic>> items, String token) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/Order'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'RestaurantId': restaurantId,
+          'Items': items.map((e) => {
+            'MenuItemId': e['id'],
+            'Quantity': e['quantity']
+          }).toList(),
+        }),
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return {'success': true, 'message': 'Siparişiniz başarıyla alındı.'};
+      }
+      return {'success': false, 'message': 'Sipariş verilirken hata oluştu.'};
+    } catch (e) {
+      return {'success': false, 'message': 'Teknik Hata: $e'};
+    }
+  }
+
+  // SİPARİŞ GEÇMİŞİNİ GETİR
+  static Future<List<dynamic>> getOrders(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/Order/my-orders'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      print('Sipariş geçmişi hatası: $e');
+      return [];
+    }
+  }
+
+  // KATEGORİYE GÖRE YEMEK GETİR
+  static Future<List<dynamic>> getMenuItemsByCategory(String category) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/MenuItem/category/$category'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // FAVORİ EKLE/KALDIR
+  static Future<Map<String, dynamic>> toggleFavorite(int restaurantId, String token) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/Favorite/$restaurantId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      return {
+        'success': response.statusCode == 200,
+        'isFavorite': response.statusCode == 200 ? jsonDecode(response.body)['isFavorite'] : false,
+      };
+    } catch (e) {
+      return {'success': false, 'isFavorite': false};
+    }
+  }
+
+  // FAVORİLERİ GETİR
+  static Future<List<dynamic>> getFavorites(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/Favorite'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // ARAMA YAP
+  static Future<List<dynamic>> searchMenuItems(String query) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/MenuItem/search/$query'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // SİPARİŞ DURUMUNU GÜNCELLE (ADMIN)
+  static Future<bool> updateOrderStatus(int orderId, String status, String token) async {
+    try {
+      final response = await http.patch(
+        Uri.parse('$baseUrl/Order/$orderId/status'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(status),
+      ).timeout(const Duration(seconds: 10));
+
+      return response.statusCode == 200;
+    } catch (e) {
+      print('Sipariş güncelleme hatası: $e');
+      return false;
+    }
+  }
+}

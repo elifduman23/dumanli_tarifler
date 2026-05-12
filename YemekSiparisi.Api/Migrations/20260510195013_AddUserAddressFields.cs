@@ -1,0 +1,48 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace YemekSiparisi.Api.Migrations
+{
+    /// <inheritdoc />
+    public partial class AddUserAddressFields : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AddColumn<string>(
+                name: "District",
+                table: "Users",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Neighborhood",
+                table: "Users",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Province",
+                table: "Users",
+                type: "nvarchar(max)",
+                nullable: true);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropColumn(
+                name: "District",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "Neighborhood",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "Province",
+                table: "Users");
+        }
+    }
+}

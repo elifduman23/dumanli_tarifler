@@ -1,0 +1,32 @@
+# Root .gitignore for Yemek Siparişi Uygulaması
+
+# .NET artifacts
+**/bin/
+**/obj/
+**/appsettings.Development.json
+**/Properties/launchSettings.json
+
+# Flutter artifacts
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/.pub-cache/
+**/.pub/
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+
+# IDE files
+**/.vscode/
+**/.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
