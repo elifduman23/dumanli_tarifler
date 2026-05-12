@@ -76,11 +76,44 @@ namespace YemekSiparisi.Api.Data
                 new Restaurant { Id = 3, Name = "Dumanlı Burger", Description = "Gurme burger ve özel soslar.", Address = "Bahçelievler Mah. No: 7", Rating = 4.7, LogoUrl = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500", CreatedAt = System.DateTime.Now, OwnerId = null },
                 new Restaurant { Id = 4, Name = "Tatlı Köşesi", Description = "Geleneksel ve modern tatlılar.", Address = "Kanalboyu Cad. No: 21", Rating = 4.9, LogoUrl = "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500", CreatedAt = System.DateTime.Now, OwnerId = null },
                 new Restaurant { Id = 5, Name = "Ege Deniz Restoran", Description = "Taze balık ve deniz mahsulleri.", Address = "Fahri Kayahan No: 88", Rating = 4.6, LogoUrl = "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500", CreatedAt = System.DateTime.Now, OwnerId = null },
-                new Restaurant { Id = 6, Name = "Yeşil Bahçe", Description = "Sağlıklı salatalar ve vegan seçenekler.", Address = "İnönü Cad. No: 156", Rating = 4.4, LogoUrl = "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500", CreatedAt = System.DateTime.Now, OwnerId = null }
+                new Restaurant
+                {
+                    Id = 6,
+                    Name = "Yeşil Bahçe",
+                    Description = "Doğadan sofranıza taze sebze ve meyveler.",
+                    Address = "Yeşilyurt Mah. Doğa Cad. No: 12",
+                    LogoUrl = "https://images.unsplash.com/photo-1540420773420-3366772f4999",
+                    Rating = 4.7,
+                    CreatedAt = System.DateTime.Now,
+                    OwnerId = null
+                },
+                new Restaurant
+                {
+                    Id = 7,
+                    Name = "Malatya Ali Dayının Yeri",
+                    Description = "Malatya'nın eşsiz lezzetleri, taze ve doğal ürünlerle Ali Dayı farkıyla.",
+                    Address = "Kanalboyu Cad. No: 45, Malatya",
+                    LogoUrl = "https://images.unsplash.com/photo-1626074353765-517a681e40be",
+                    Rating = 4.9,
+                    CreatedAt = System.DateTime.Now,
+                    OwnerId = null
+                }
             );
 
             modelBuilder.Entity<MenuItem>().HasData(
-                // Kebapçı (ID: 1-2)
+                // ALİ DAYI MALATYA MENÜSÜ
+                new MenuItem { Id = 51, RestaurantId = 7, Name = "1.5 Karışık Izgara", Description = "Tavuk, Kıyma, Kuşbaşı etlerinin muhteşem buluşması.", Price = 1125, Category = "Ana Yemekler", ImageUrl = "https://images.unsplash.com/photo-1626074353765-517a681e40be", IsInStock = true },
+                new MenuItem { Id = 52, RestaurantId = 7, Name = "Kiremitte Kaşarlı Alabalık", Description = "Fırında taze alabalık, üzerine erimiş kaşar peyniri.", Price = 410, Category = "Ana Yemekler", ImageUrl = "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2", IsInStock = true },
+                new MenuItem { Id = 53, RestaurantId = 7, Name = "Adana Kebap (Tek Şiş)", Description = "Özel baharatlarla hazırlanan zırh kıyması.", Price = 230, Category = "Ana Yemekler", ImageUrl = "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0", IsInStock = true },
+                new MenuItem { Id = 54, RestaurantId = 7, Name = "Kuşbaşı Kebap (Tek Şiş)", Description = "Lokum gibi kuzu kuşbaşı.", Price = 250, Category = "Ana Yemekler", ImageUrl = "https://images.unsplash.com/photo-1544025162-d76694265947", IsInStock = true },
+                new MenuItem { Id = 55, RestaurantId = 7, Name = "Balık Dürüm", Description = "Taze balık eti, yeşillik ve özel sos ile.", Price = 250, Category = "Ana Yemekler", ImageUrl = "https://images.unsplash.com/photo-1554522723-b2a47cb105e3", IsInStock = true },
+                new MenuItem { Id = 56, RestaurantId = 7, Name = "Mercimek Çorbası", Description = "Sıcacık, ev yapımı tadında.", Price = 130, Category = "Çorbalar", ImageUrl = "https://images.unsplash.com/photo-1547592166-23ac45744acd", IsInStock = true },
+                new MenuItem { Id = 57, RestaurantId = 7, Name = "Fırın Helva", Description = "Sıcak servis edilen enfes tahin helvası.", Price = 150, Category = "Tatlılar", ImageUrl = "https://images.unsplash.com/photo-1579372781875-66bbaf22c702", IsInStock = true },
+                new MenuItem { Id = 58, RestaurantId = 7, Name = "Künefe", Description = "Bol peynirli, çıtır çıtır.", Price = 200, Category = "Tatlılar", ImageUrl = "https://images.unsplash.com/photo-1571115177098-24ec42ed2bb4", IsInStock = true },
+                new MenuItem { Id = 59, RestaurantId = 7, Name = "Yayık Ayran", Description = "Buz gibi, bol köpüklü.", Price = 35, Category = "İçecekler", ImageUrl = "https://images.unsplash.com/photo-1571328003758-4a3921661709", IsInStock = true },
+                new MenuItem { Id = 60, RestaurantId = 7, Name = "Türk Kahvesi", Description = "Közde ağır ağır pişmiş.", Price = 80, Category = "İçecekler", ImageUrl = "https://images.unsplash.com/photo-1544787210-22bb1e8163ee", IsInStock = true },
+
+                // Mevcut Menüler...
                 new MenuItem { Id = 1, RestaurantId = 1, Name = "Adana Kebap", Description = "Zırh kıyması, közlenmiş biber ile.", Price = 250, DiscountPrice = 200, Category = "Kebap", ImageUrl = "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500", IsInStock = true },
                 new MenuItem { Id = 2, RestaurantId = 1, Name = "Lahmacun", Description = "Çıtır Antep lahmacunu.", Price = 80, DiscountPrice = 65, Category = "Kebap", ImageUrl = "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500", IsInStock = true },
                 // Pizza (ID: 3-4)
