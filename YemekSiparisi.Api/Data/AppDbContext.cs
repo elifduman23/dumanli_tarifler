@@ -97,10 +97,33 @@ namespace YemekSiparisi.Api.Data
                     Rating = 4.9,
                     CreatedAt = System.DateTime.Now,
                     OwnerId = null
+                },
+                new Restaurant
+                {
+                    Id = 8,
+                    Name = "Elazığ Kömürhan Kavurma",
+                    Description = "Efsane Kömürhan kavurması ve Elazığ'ın yöresel et lezzetleri.",
+                    Address = "Malatya-Elazığ Yolu, Kömürhan Mevkii",
+                    LogoUrl = "https://images.unsplash.com/photo-1544025162-d76694265947",
+                    Rating = 4.9,
+                    CreatedAt = System.DateTime.Now,
+                    OwnerId = null
                 }
             );
 
             modelBuilder.Entity<MenuItem>().HasData(
+                // KÖMÜRHAN KAVURMA MENÜSÜ
+                new MenuItem { Id = 70, RestaurantId = 8, Name = "Kömürhan Kavurma", Description = "Kömürhan'ın dünyaca ünlü, lokum gibi kuzu kavurması.", Price = 1350, Category = "Spesiyaller", ImageUrl = "https://images.unsplash.com/photo-1603360946369-dc9bb6258143", IsInStock = true },
+                new MenuItem { Id = 71, RestaurantId = 8, Name = "Kuzu Kafes", Description = "Bütün kuzu kafes, özel fırınlama tekniği ile.", Price = 4400, Category = "Spesiyaller", ImageUrl = "https://images.unsplash.com/photo-1544025162-d76694265947", IsInStock = true },
+                new MenuItem { Id = 72, RestaurantId = 8, Name = "Kalbur Burma Kebap", Description = "Kalbur usulü fıstıklı ve özel zırh kıymalı.", Price = 1150, Category = "Spesiyaller", ImageUrl = "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0", IsInStock = true },
+                new MenuItem { Id = 73, RestaurantId = 8, Name = "Kiremitte Kaşarlı Kavurma", Description = "Fırında kaşar peyniri ile harmanlanmış kavurma.", Price = 1350, Category = "Spesiyaller", ImageUrl = "https://images.unsplash.com/photo-1603360946369-dc9bb6258143", IsInStock = true },
+                new MenuItem { Id = 74, RestaurantId = 8, Name = "Fırın Beyti", Description = "Özel sos ve yoğurt eşliğinde fırınlanmış beyti.", Price = 920, Category = "Spesiyaller", ImageUrl = "https://images.unsplash.com/photo-1555396273-367ea4eb4db5", IsInStock = true },
+                new MenuItem { Id = 75, RestaurantId = 8, Name = "Adana Kebap", Description = "Klasik Adana lezzeti, közlenmiş sebzelerle.", Price = 750, Category = "Kebaplar", ImageUrl = "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0", IsInStock = true },
+                new MenuItem { Id = 76, RestaurantId = 8, Name = "Küşleme", Description = "Kuzunun en özel ve yumuşak yeri.", Price = 1340, Category = "Kırmızı Etler", ImageUrl = "https://images.unsplash.com/photo-1544025162-d76694265947", IsInStock = true },
+                new MenuItem { Id = 77, RestaurantId = 8, Name = "Şefin Salatası", Description = "Taptaze mevsim sebzeleri ve özel şef sosu.", Price = 500, Category = "Salatalar", ImageUrl = "https://images.unsplash.com/photo-1512621776951-a57141f2eefd", IsInStock = true },
+                new MenuItem { Id = 78, RestaurantId = 8, Name = "Muhammara", Description = "Cevizli ve nar ekşili nefis meze.", Price = 330, Category = "Mezeler", ImageUrl = "https://images.unsplash.com/photo-1541529086526-db283c563270", IsInStock = true },
+                new MenuItem { Id = 79, RestaurantId = 8, Name = "Yayık Ayran", Description = "Bol köpüklü, doğal yayık ayranı.", Price = 60, Category = "İçecekler", ImageUrl = "https://images.unsplash.com/photo-1571328003758-4a3921661709", IsInStock = true },
+
                 // ALİ DAYI MALATYA MENÜSÜ
                 new MenuItem { Id = 51, RestaurantId = 7, Name = "1.5 Karışık Izgara", Description = "Tavuk, Kıyma, Kuşbaşı etlerinin muhteşem buluşması.", Price = 1125, Category = "Ana Yemekler", ImageUrl = "https://images.unsplash.com/photo-1626074353765-517a681e40be", IsInStock = true },
                 new MenuItem { Id = 52, RestaurantId = 7, Name = "Kiremitte Kaşarlı Alabalık", Description = "Fırında taze alabalık, üzerine erimiş kaşar peyniri.", Price = 410, Category = "Ana Yemekler", ImageUrl = "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2", IsInStock = true },
