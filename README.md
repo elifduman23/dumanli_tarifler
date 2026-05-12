@@ -60,11 +60,6 @@ Bu proje, modern bir yemek sipariş platformunun tüm katmanlarını (Backend, M
 
 Sisteme kayıt olan **ilk kullanıcı** otomatik olarak `Admin` rolüne sahip olur. Admin yetkisiyle giriş yapıldığında, profil sayfasında **"Yönetici Paneli"** butonu aktifleşecektir. Bu panelden tüm siparişleri yönetebilir ve sistem istatistiklerini görüntüleyebilirsiniz.
 
----
-
-## 📜 Lisans ve Notlar
-
-Bu proje, Yapay Zeka Koordinatörlüğü ve modern uygulama geliştirme standartları göz önünde bulundurularak hazırlanmıştır. Tüm görseller ve veriler profesyonel bir kullanıcı deneyimi sunmak adına özenle seçilmiştir.
 
 ---
 *Geliştirici: Elif Duman*
