@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<dynamic> _allRestaurants = [];
   List<dynamic> _filteredRestaurants = [];
   List<int> _favoriteIds = [];
+  List<String> _categories = [];
   bool _isLoading = true;
   final TextEditingController _searchController = TextEditingController();
 
@@ -33,12 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final restaurants = await ApiService.getRestaurants();
       final favorites = await ApiService.getFavorites(widget.token);
+      final categories = await ApiService.getCategories();
       
       if (mounted) {
         setState(() {
           _allRestaurants = restaurants;
           _filteredRestaurants = restaurants;
           _favoriteIds = favorites.map<int>((f) => f['id'] as int).toList();
+          _categories = categories;
           _isLoading = false;
           _searchController.clear();
         });
@@ -66,6 +69,20 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
     }
+  }
+
+  IconData _getCategoryIcon(String category) {
+    category = category.toLowerCase();
+    if (category.contains('pizza')) return Icons.local_pizza;
+    if (category.contains('burger')) return Icons.lunch_dining;
+    if (category.contains('kebap') || category.contains('et') || category.contains('kavurma')) return Icons.kebab_dining;
+    if (category.contains('tatlı')) return Icons.icecream;
+    if (category.contains('içecek')) return Icons.local_drink;
+    if (category.contains('balık') || category.contains('deniz')) return Icons.set_meal;
+    if (category.contains('meze')) return Icons.bakery_dining;
+    if (category.contains('spesiyal')) return Icons.star;
+    if (category.contains('çorba')) return Icons.soup_kitchen;
+    return Icons.restaurant;
   }
 
   void _searchRestaurants(String query) {
@@ -153,27 +170,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 25),
                           const SizedBox(height: 10),
                         ],
                       ),
                     ),
                   ),
 
-                  // Kategoriler
+                  // Kategoriler (Dinamik)
                   SliverToBoxAdapter(
                     child: SizedBox(
                       height: 120,
-                      child: ListView(
+                      child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.symmetric(horizontal: 15),
-                        children: [
-                          _buildCategoryItem(context, 'Pizza', Icons.local_pizza),
-                          _buildCategoryItem(context, 'Burger', Icons.lunch_dining),
-                          _buildCategoryItem(context, 'Döner', Icons.kebab_dining),
-                          _buildCategoryItem(context, 'Tatlı', Icons.icecream),
-                          _buildCategoryItem(context, 'İçecek', Icons.local_drink),
-                        ],
+                        itemCount: _categories.length,
+                        itemBuilder: (context, index) {
+                          final category = _categories[index];
+                          return _buildCategoryItem(context, category, _getCategoryIcon(category));
+                        },
                       ),
                     ),
                   ),
@@ -325,7 +339,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
   }
 }

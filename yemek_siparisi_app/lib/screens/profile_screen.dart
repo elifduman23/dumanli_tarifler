@@ -6,7 +6,6 @@ import 'orders_screen.dart';
 import 'coupons_screen.dart';
 import 'notifications_screen.dart';
 import 'admin_panel_screen.dart';
-import 'support_screen.dart';
 import '../main.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -90,9 +89,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _buildMenuItem(context, 'Yönetici Paneli', Icons.admin_panel_settings_outlined, () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPanelScreen(token: widget.token)));
                     }),
-                  _buildMenuItem(context, 'Destek', Icons.support_agent, () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const SupportScreen()));
-                  }),
                   _buildMenuItem(context, 'Çıkış Yap', Icons.logout, () {
                     Navigator.pushAndRemoveUntil(
                       context, 

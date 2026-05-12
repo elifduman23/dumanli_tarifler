@@ -228,6 +228,25 @@ class ApiService {
     }
   }
 
+  // TÜM KATEGORİLERİ GETİR (DİNAMİK)
+  static Future<List<String>> getCategories() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/MenuItem/categories'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((e) => e.toString()).toList();
+      }
+      return [];
+    } catch (e) {
+      print('Kategori getirme hatası: $e');
+      return [];
+    }
+  }
+
   // FAVORİ EKLE/KALDIR
   static Future<Map<String, dynamic>> toggleFavorite(int restaurantId, String token) async {
     try {

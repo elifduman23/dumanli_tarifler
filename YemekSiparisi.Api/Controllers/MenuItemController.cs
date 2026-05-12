@@ -16,6 +16,18 @@ namespace YemekSiparisi.Api.Controllers
             _context = context;
         }
 
+        // Tüm benzersiz kategorileri getir
+        [HttpGet("categories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var categories = await _context.MenuItems
+                .Select(m => m.Category)
+                .Distinct()
+                .ToListAsync();
+            
+            return Ok(categories);
+        }
+
         // Kategoriye göre yemekleri getir
         [HttpGet("category/{categoryName}")]
         public async Task<IActionResult> GetByCategory(string categoryName)
