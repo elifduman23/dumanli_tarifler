@@ -1,53 +1,70 @@
-# Dumanlı Tarifler - Yemek Siparişi Uygulaması
+# Dumanlı Tarifler - Full-Stack Yemek Sipariş Platformu 🥘🚀
 
-Bu proje, tam kapsamlı (Full-Stack) bir yemek siparişi uygulamasıdır.
+Bu proje, modern bir yemek sipariş platformunun tüm katmanlarını (Backend, Mobile, Database) kapsayan, profesyonel standartlarda geliştirilmiş bir **Full-Stack** uygulamadır. Proje; .NET 8 Web API, Flutter (Dart) ve SQL Server teknolojileri üzerine inşa edilmiştir.
 
-## Proje Yapısı
+## ✨ Öne Çıkan Özellikler
 
-- **YemekSiparisi.Api**: C# .NET Core 8.0 Web API ile geliştirilmiş backend projesi. Entity Framework Core ve SQL Server kullanır.
-- **yemek_siparisi_app**: Flutter ile geliştirilmiş modern mobil uygulama.
+- **Gelişmiş Kimlik Doğrulama:** JWT (JSON Web Token) tabanlı güvenli oturum yönetimi ve Rol Tabanlı Erişim Kontrolü (Admin/Müşteri).
+- **Gerçek Zamanlı Bildirimler:** Sipariş durumu değişikliklerinde (Hazırlanıyor, Yolda, Teslim Edildi) kullanıcıya anlık bildirim gönderimi.
+- **Dinamik Sepet Yönetimi:** Çoklu restorandan aynı anda ürün ekleme desteği ve otomatik sipariş gruplama.
+- **Akıllı Kupon Sistemi:** Tek kullanımlık indirim kodları (Örn: `BEDAVA2344` - %50 İndirim).
+- **Admin Dashboard:** Toplam ciro, kullanıcı sayısı ve sipariş istatistiklerinin anlık takibi.
+- **Lokasyon Entegrasyonu:** İl, ilçe ve mahalle bazlı dinamik adres yönetim sistemi.
+- **Favoriler ve Arama:** Restoranları favorilere ekleme ve ürün bazlı global arama motoru.
 
-## Kurulum ve Çalıştırma
+---
 
-### 1. Veritabanı Hazırlığı
-Backend projesi SQL Server kullanmaktadır. `YemekSiparisi.Api/appsettings.json` dosyasındaki `ConnectionStrings` bölümünü kendi yerel SQL Server ayarlarınıza göre güncelleyin.
+## 🛠️ Teknolojiler
 
-Ardından terminalde şu komutu çalıştırarak veritabanını oluşturun:
-```bash
-cd YemekSiparisi.Api
-dotnet ef database update
-```
+- **Backend:** .NET 8.0 Web API, Entity Framework Core
+- **Database:** Microsoft SQL Server
+- **Mobile:** Flutter (Dart)
+- **Güvenlik:** JWT Bearer Authentication
+- **Mimari:** Katmanlı Mimari (N-Tier) & Repository Pattern prensipleri
 
-### 2. Backend (API) Başlatma
-API'yi çalıştırmak için:
-```bash
-dotnet run
-```
-API varsayılan olarak `http://localhost:5000` adresinde çalışacaktır.
+---
 
-### 3. Mobil Uygulama (Flutter) Başlatma
-Flutter uygulamasını çalıştırmadan önce bağımlılıkları yükleyin:
-```bash
-cd yemek_siparisi_app
-flutter pub get
-```
+## 🚀 Kurulum ve Çalıştırma Talimatları
 
-Ardından uygulamayı başlatın:
-```bash
-flutter run
-```
+### 1. Backend (API) Kurulumu
 
-**Not:** Android Emülatör kullanıyorsanız, uygulama otomatik olarak `10.0.2.2:5000` adresine bağlanacak şekilde ayarlanmıştır. Fiziksel cihaz kullanıyorsanız, bilgisayarınızın yerel IP adresini `lib/services/api_service.dart` dosyasında güncellemeniz veya `adb reverse` kullanmanız gerekebilir.
+1.  **Veritabanı Yapılandırması:** `YemekSiparisi.Api/appsettings.json` dosyasını açın ve `ConnectionStrings` bölümünü kendi SQL Server instance bilgilerinize göre güncelleyin:
+    ```json
+    "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=YemekSiparisi_DB;Trusted_Connection=True;TrustServerCertificate=True;"
+    ```
+2.  **Veritabanını Oluşturma:** Terminalde API dizinine giderek aşağıdaki komutları çalıştırın (Migration'ların işlenmesi ve Seed verilerin yüklenmesi için):
+    ```bash
+    dotnet ef database update
+    ```
+3.  **API'yi Çalıştırma:** 
+    ```bash
+    dotnet run
+    ```
+    *API varsayılan olarak `http://localhost:5000` portundan hizmet verecektir.*
 
-## Özellikler
-- JWT Tabanlı Kimlik Doğrulama (Kayıt Ol / Giriş Yap)
-- Restoran ve Menü Listeleme
-- Kategoriye Göre Filtreleme ve Arama
-- Sepet Sistemi ve Sipariş Oluşturma
-- Sipariş Geçmişi Takibi
-- Favori Restoranlar
-- Admin Paneli (Sipariş Durumu Güncelleme)
+### 2. Mobile (Flutter) Kurulumu
 
-## Kullanılan Teknolojiler
-- **Backend:** .NET 8.0, Entity Framework Core, SQL Server, JWT
-- **Mobil:** Flutter, Provider/State Management, HTTP
+1.  **Bağımlılıkları Yükleme:** Mobil uygulama dizininde şu komutu çalıştırın:
+    ```bash
+    flutter pub get
+    ```
+2.  **API Bağlantı Ayarı:** `lib/services/api_service.dart` dosyasını açın. Eğer emülatör veya fiziksel cihaz üzerinden yerel API'ye bağlanacaksanız `baseUrl` değerini kendi yerel IP adresiniz veya `http://localhost:5000/api` olarak güncelleyin.
+3.  **Uygulamayı Çalıştırma:**
+    ```bash
+    flutter run
+    ```
+
+---
+
+## 🛡️ Admin Erişimi
+
+Sisteme kayıt olan **ilk kullanıcı** otomatik olarak `Admin` rolüne sahip olur. Admin yetkisiyle giriş yapıldığında, profil sayfasında **"Yönetici Paneli"** butonu aktifleşecektir. Bu panelden tüm siparişleri yönetebilir ve sistem istatistiklerini görüntüleyebilirsiniz.
+
+---
+
+## 📜 Lisans ve Notlar
+
+Bu proje, Yapay Zeka Koordinatörlüğü ve modern uygulama geliştirme standartları göz önünde bulundurularak hazırlanmıştır. Tüm görseller ve veriler profesyonel bir kullanıcı deneyimi sunmak adına özenle seçilmiştir.
+
+---
+*Geliştirici: Elif Duman*

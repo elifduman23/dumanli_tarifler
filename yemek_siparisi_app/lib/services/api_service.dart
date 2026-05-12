@@ -4,6 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
+  /* 
+     PROFESYONEL NOT: 
+     Yerel test ortamında (Localhost) çalıştırmak için aşağıdaki baseUrl değerini 
+     kendi yerel IP adresiniz veya 'http://localhost:5000/api' ile değiştirebilirsiniz.
+  */
   static String get baseUrl {
     if (kIsWeb) return 'http://localhost:5000/api';
     
