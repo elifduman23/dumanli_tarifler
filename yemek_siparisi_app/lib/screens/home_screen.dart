@@ -154,16 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 25),
-                          // Kampanya Banner
-                          SizedBox(
-                            height: 150,
-                            child: PageView(
-                              children: [
-                                _buildPromoCard('DUMANLI FIRSAT', '%30 İndirim', 'Akşam sefasına özel tüm dürümlerde indirim!', const Color(0xFF2C1B1B)),
-                                _buildPromoCard('YENİ RESTORAN', 'GastroGo Açıldı', 'Şimdi sipariş ver, GastroPuan kazan!', const Color(0xFF1B2C21)),
-                              ],
-                            ),
-                          ),
+                          const SizedBox(height: 10),
                         ],
                       ),
                     ),
@@ -336,29 +327,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPromoCard(String label, String title, String desc, Color color) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.circular(8)),
-            child: Text(label, style: const TextStyle(color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold)),
-          ),
-          const SizedBox(height: 12),
-          Text(title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 5),
-          Text(desc, style: const TextStyle(color: Colors.white70, fontSize: 13)),
-        ],
-      ),
-    );
   }
 }
