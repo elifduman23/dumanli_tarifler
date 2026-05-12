@@ -191,9 +191,24 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  '₺${item['price']}',
-                  style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 17),
+                Row(
+                  children: [
+                    if (item['discountPrice'] != null) ...[
+                      Text(
+                        '₺${item['discountPrice']}',
+                        style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '₺${item['price']}',
+                        style: const TextStyle(color: Colors.grey, decoration: TextDecoration.lineThrough, fontSize: 13),
+                      ),
+                    ] else
+                      Text(
+                        '₺${item['price']}',
+                        style: const TextStyle(color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 17),
+                      ),
+                  ],
                 ),
               ],
             ),

@@ -42,14 +42,42 @@ namespace YemekSiparisi.Api.Controllers
                 var menuItem = await _context.MenuItems.FindAsync(item.MenuItemId);
                 if (menuItem != null)
                 {
+                    // İndirimli fiyat varsa onu kullan, yoksa normal fiyatı
+                    decimal unitPrice = menuItem.DiscountPrice ?? menuItem.Price;
+
                     var orderItem = new OrderItem
                     {
                         MenuItemId = item.MenuItemId,
                         Quantity = item.Quantity,
-                        UnitPrice = menuItem.Price
+                        UnitPrice = unitPrice
                     };
                     order.OrderItems.Add(orderItem);
-                    totalAmount += (menuItem.Price * item.Quantity);
+                    totalAmount += (unitPrice * item.Quantity);
+                }
+            }
+
+            // KUPON UYGULAMA
+            if (!string.IsNullOrEmpty(request.CouponCode))
+            {
+                var coupon = await _context.Coupons.FirstOrDefaultAsync(c => 
+                    c.Code == request.CouponCode && 
+                    c.UserId == userId && 
+                    !c.IsUsed);
+
+                if (coupon != null)
+                {
+                    if (coupon.DiscountType == "Percentage")
+                    {
+                        totalAmount -= (totalAmount * (coupon.DiscountValue / 100));
+                    }
+                    else if (coupon.DiscountType == "Flat")
+                    {
+                        totalAmount -= coupon.DiscountValue;
+                    }
+                    
+                    if (totalAmount < 0) totalAmount = 0; // Fiyat eksiye düşmesin
+
+                    coupon.IsUsed = true; // Kuponu kullanıldı yap
                 }
             }
 
@@ -58,7 +86,6 @@ namespace YemekSiparisi.Api.Controllers
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            // Ödeme simülasyonu
             return Ok(new { 
                 Message = "Siparişiniz başarıyla alındı ve ödeme tamamlandı.", 
                 OrderId = order.Id, 
@@ -115,6 +142,7 @@ namespace YemekSiparisi.Api.Controllers
     public class CreateOrderDto
     {
         public int RestaurantId { get; set; }
+        public string? CouponCode { get; set; }
         public List<OrderItemDto> Items { get; set; }
     }
 

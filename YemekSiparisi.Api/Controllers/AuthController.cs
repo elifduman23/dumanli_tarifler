@@ -47,7 +47,29 @@ namespace YemekSiparisi.Api.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "Kayıt başarılı." });
+            // HOŞ GELDİN KUPONLARI TANIMLA
+            var coupons = new List<Coupon>
+            {
+                new Coupon { 
+                    UserId = user.Id, 
+                    Code = "DUMANLI50", 
+                    Description = "İlk Siparişe Özel %50 İndirim", 
+                    DiscountType = "Percentage", 
+                    DiscountValue = 50 
+                },
+                new Coupon { 
+                    UserId = user.Id, 
+                    Code = "LEZZET25", 
+                    Description = "Tüm Siparişlerde Geçerli 25 TL İndirim", 
+                    DiscountType = "Flat", 
+                    DiscountValue = 25 
+                }
+            };
+
+            _context.Coupons.AddRange(coupons);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Kayıt başarılı. Hoş geldin kuponlarınız tanımlandı!" });
         }
 
         [HttpPost("login")]

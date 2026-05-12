@@ -22,6 +22,45 @@ namespace YemekSiparisi.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("YemekSiparisi.Api.Models.Coupon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DiscountType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DiscountValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Coupons");
+                });
+
             modelBuilder.Entity("YemekSiparisi.Api.Models.Favorite", b =>
                 {
                     b.Property<int>("Id")
@@ -64,6 +103,9 @@ namespace YemekSiparisi.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal?>("DiscountPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -86,6 +128,56 @@ namespace YemekSiparisi.Api.Migrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("MenuItems");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Category = "Kebap",
+                            Description = "Zırh kıyması, közlenmiş biber ve domates ile.",
+                            DiscountPrice = 200m,
+                            ImageUrl = "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500",
+                            IsInStock = true,
+                            Name = "Adana Kebap",
+                            Price = 250m,
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Category = "Kebap",
+                            Description = "Bol malzemeli çıtır Antep lahmacunu.",
+                            DiscountPrice = 65m,
+                            ImageUrl = "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500",
+                            IsInStock = true,
+                            Name = "Lahmacun",
+                            Price = 80m,
+                            RestaurantId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Category = "Pizza",
+                            Description = "Mozzarella, taze fesleğen ve domates sosu.",
+                            DiscountPrice = 149m,
+                            ImageUrl = "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=500",
+                            IsInStock = true,
+                            Name = "Margarita Pizza",
+                            Price = 180m,
+                            RestaurantId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Category = "Burger",
+                            Description = "180gr köfte, karamelize soğan ve cheddar.",
+                            DiscountPrice = 199m,
+                            ImageUrl = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500",
+                            IsInStock = true,
+                            Name = "Classic Burger",
+                            Price = 220m,
+                            RestaurantId = 3
+                        });
                 });
 
             modelBuilder.Entity("YemekSiparisi.Api.Models.Order", b =>
@@ -188,6 +280,41 @@ namespace YemekSiparisi.Api.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Restaurants");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "Çarşı Merkezi, No: 44",
+                            CreatedAt = new DateTime(2026, 5, 12, 12, 53, 35, 222, DateTimeKind.Local).AddTicks(4272),
+                            Description = "En lezzetli kebaplar ve lahmacunlar.",
+                            LogoUrl = "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500",
+                            Name = "Gaziantep Kebapçısı",
+                            OwnerId = 1,
+                            Rating = 4.7999999999999998
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "Cumhuriyet Cad. No: 12",
+                            CreatedAt = new DateTime(2026, 5, 12, 12, 53, 35, 222, DateTimeKind.Local).AddTicks(4290),
+                            Description = "Gerçek odun ateşinde İtalyan pizzası.",
+                            LogoUrl = "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
+                            Name = "İtalyan Pizza Dünyası",
+                            OwnerId = 1,
+                            Rating = 4.5
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "Bahçelievler Mah. No: 7",
+                            CreatedAt = new DateTime(2026, 5, 12, 12, 53, 35, 222, DateTimeKind.Local).AddTicks(4293),
+                            Description = "Gurme burger ve özel soslar.",
+                            LogoUrl = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500",
+                            Name = "Dumanlı Burger",
+                            OwnerId = 1,
+                            Rating = 4.7000000000000002
+                        });
                 });
 
             modelBuilder.Entity("YemekSiparisi.Api.Models.User", b =>
@@ -229,6 +356,31 @@ namespace YemekSiparisi.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 5, 12, 9, 53, 35, 222, DateTimeKind.Utc).AddTicks(3959),
+                            District = "Battalgazi",
+                            Email = "admin@dumanli.com",
+                            FullName = "Sistem Yöneticisi",
+                            Neighborhood = "Üniversite",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ3y...",
+                            Province = "Malatya",
+                            Role = "Admin"
+                        });
+                });
+
+            modelBuilder.Entity("YemekSiparisi.Api.Models.Coupon", b =>
+                {
+                    b.HasOne("YemekSiparisi.Api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("YemekSiparisi.Api.Models.Favorite", b =>

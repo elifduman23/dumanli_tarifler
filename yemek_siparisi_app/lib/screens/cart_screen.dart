@@ -11,7 +11,9 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  bool _isOrdering = false;
+  final _couponController = TextEditingController();
+  double _discountAmount = 0;
+  String? _appliedCoupon;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class _CartScreenState extends State<CartScreen> {
                   const Text('Henüz sepetinde bir duman yok!', style: TextStyle(color: Colors.grey, fontSize: 16)),
                   const SizedBox(height: 10),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.pop(context),
                     child: const Text('Hemen Lezzetleri Keşfet', style: TextStyle(color: Colors.amber)),
                   ),
                 ],
@@ -98,6 +100,7 @@ class _CartScreenState extends State<CartScreen> {
                 onPressed: () {
                   setState(() {
                     CartManager().removeFromCart(item['id']);
+                    _calculateDiscount(CartManager().totalPrice);
                   });
                 },
               ),
@@ -107,6 +110,7 @@ class _CartScreenState extends State<CartScreen> {
                 onPressed: () {
                   setState(() {
                     CartManager().addToCart(item, CartManager().restaurantId!);
+                    _calculateDiscount(CartManager().totalPrice);
                   });
                 },
               ),
@@ -117,7 +121,20 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  void _calculateDiscount(double total) {
+    if (_appliedCoupon == 'DUMANLI50') {
+      _discountAmount = total * 0.5;
+    } else if (_appliedCoupon == 'LEZZET25' && total >= 100) {
+      _discountAmount = 25;
+    } else {
+      _discountAmount = 0;
+    }
+  }
+
   Widget _buildSummary(CartManager cart) {
+    double finalTotal = cart.totalPrice - _discountAmount;
+    if (finalTotal < 0) finalTotal = 0;
+
     return Container(
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
@@ -129,11 +146,79 @@ class _CartScreenState extends State<CartScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // KUPON ALANI
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: TextField(
+                      controller: _couponController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
+                        hintText: 'Kupon Kodun Var mı?',
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _appliedCoupon = _couponController.text.toUpperCase();
+                      _calculateDiscount(cart.totalPrice);
+                    });
+                    if (_discountAmount > 0) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Kupon Başarıyla Uygulandı!'), backgroundColor: Colors.green),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Geçersiz Kupon veya Alt Limit Yetersiz.'), backgroundColor: Colors.red),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber.withOpacity(0.1),
+                    foregroundColor: Colors.amber,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    side: const BorderSide(color: Colors.amber),
+                  ),
+                  child: const Text('UYGULA'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            if (_discountAmount > 0) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Ara Toplam', style: TextStyle(color: Colors.grey)),
+                  Text('₺${cart.totalPrice.toStringAsFixed(2)}', style: const TextStyle(color: Colors.white70)),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('İndirim', style: TextStyle(color: Colors.green)),
+                  Text('-₺${_discountAmount.toStringAsFixed(2)}', style: const TextStyle(color: Colors.green)),
+                ],
+              ),
+              const Divider(color: Colors.white12, height: 20),
+            ],
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Toplam Tutar', style: TextStyle(fontSize: 16, color: Colors.grey)),
-                Text('₺${cart.totalPrice.toStringAsFixed(2)}', 
+                const Text('Ödenecek Tutar', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                Text('₺${finalTotal.toStringAsFixed(2)}', 
                   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.amber)),
               ],
             ),
@@ -149,6 +234,7 @@ class _CartScreenState extends State<CartScreen> {
                     cart.restaurantId!,
                     cart.items,
                     widget.token,
+                    couponCode: _appliedCoupon,
                   );
 
                   setState(() => _isOrdering = false);

@@ -19,10 +19,13 @@ class CartManager {
     if (index != -1) {
       _items[index]['quantity'] += 1;
     } else {
+      // İndirimli fiyat varsa onu kullan, yoksa normal fiyatı
+      double effectivePrice = (product['discountPrice'] ?? product['price']).toDouble();
+      
       _items.add({
         'id': product['id'],
         'name': product['name'],
-        'price': product['price'],
+        'price': effectivePrice,
         'quantity': 1,
       });
     }

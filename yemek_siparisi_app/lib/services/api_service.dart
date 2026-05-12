@@ -123,7 +123,7 @@ class ApiService {
   }
 
   // SİPARİŞ OLUŞTUR (VERİTABANINA KAYDET)
-  static Future<Map<String, dynamic>> createOrder(int restaurantId, List<Map<String, dynamic>> items, String token) async {
+  static Future<Map<String, dynamic>> createOrder(int restaurantId, List<Map<String, dynamic>> items, String token, {String? couponCode}) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/Order'),
@@ -133,6 +133,7 @@ class ApiService {
         },
         body: jsonEncode({
           'RestaurantId': restaurantId,
+          'CouponCode': couponCode,
           'Items': items.map((e) => {
             'MenuItemId': e['id'],
             'Quantity': e['quantity']
