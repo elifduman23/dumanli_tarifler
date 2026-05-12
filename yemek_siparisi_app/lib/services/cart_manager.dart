@@ -9,13 +9,8 @@ class CartManager {
   List<Map<String, dynamic>> get items => _items;
 
   void addToCart(dynamic product, int restaurantId) {
-    if (_currentRestaurantId != null && _currentRestaurantId != restaurantId) {
-      _items.clear(); // Farklı restorandan ürün eklenirse sepeti temizle
-    }
-    _currentRestaurantId = restaurantId;
-
     // Ürün zaten sepette mi kontrol et
-    int index = _items.indexWhere((item) => item['id'] == product['id']);
+    int index = _items.indexWhere((item) => item['id'] == product['id'] && item['restaurantId'] == restaurantId);
     if (index != -1) {
       _items[index]['quantity'] += 1;
     } else {
@@ -27,13 +22,13 @@ class CartManager {
         'name': product['name'],
         'price': effectivePrice,
         'quantity': 1,
+        'restaurantId': restaurantId,
       });
     }
   }
 
   void removeFromCart(int productId) {
     _items.removeWhere((item) => item['id'] == productId);
-    if (_items.isEmpty) _currentRestaurantId = null;
   }
 
   double get totalPrice {

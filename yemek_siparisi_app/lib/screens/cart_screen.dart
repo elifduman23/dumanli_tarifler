@@ -110,7 +110,7 @@ class _CartScreenState extends State<CartScreen> {
                 icon: const Icon(Icons.add_circle_outline, color: Colors.amber, size: 24),
                 onPressed: () {
                   setState(() {
-                    CartManager().addToCart(item, CartManager().restaurantId!);
+                    CartManager().addToCart(item, item['restaurantId']);
                     _calculateDiscount(CartManager().totalPrice);
                   });
                 },
@@ -123,7 +123,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void _calculateDiscount(double total) {
-    if (_appliedCoupon == 'DUMANLI50') {
+    if (_appliedCoupon == 'BEDAVA2344' || _appliedCoupon == 'DUMANLI50') {
       _discountAmount = total * 0.5;
     } else if (_appliedCoupon == 'LEZZET25' && total >= 100) {
       _discountAmount = 25;
@@ -231,16 +231,38 @@ class _CartScreenState extends State<CartScreen> {
                 onPressed: _isOrdering ? null : () async {
                   setState(() => _isOrdering = true);
                   
-                  final result = await ApiService.createOrder(
-                    cart.restaurantId!,
-                    cart.items,
-                    widget.token,
-                    couponCode: _appliedCoupon,
-                  );
+                  // Restoranlara göre ürünleri grupla
+                  Map<int, List<Map<String, dynamic>>> groupedItems = {};
+                  for (var item in cart.items) {
+                    int resId = item['restaurantId'];
+                    if (!groupedItems.containsKey(resId)) groupedItems[resId] = [];
+                    groupedItems[resId]!.add(item);
+                  }
+
+                  bool allSuccess = true;
+                  String lastError = "";
+
+                  // Her restoran için ayrı sipariş oluştur
+                  for (var entry in groupedItems.entries) {
+                    final resId = entry.key;
+                    final resItems = entry.value;
+
+                    final result = await ApiService.createOrder(
+                      resId,
+                      resItems,
+                      widget.token,
+                      couponCode: _appliedCoupon,
+                    );
+
+                    if (!result['success']) {
+                      allSuccess = false;
+                      lastError = result['message'];
+                    }
+                  }
 
                   setState(() => _isOrdering = false);
 
-                  if (result['success']) {
+                  if (allSuccess) {
                     cart.clear();
                     if (mounted) {
                       _showSuccessDialog();
@@ -248,7 +270,7 @@ class _CartScreenState extends State<CartScreen> {
                   } else {
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(result['message']), backgroundColor: Colors.red),
+                        SnackBar(content: Text(lastError), backgroundColor: Colors.red),
                       );
                     }
                   }

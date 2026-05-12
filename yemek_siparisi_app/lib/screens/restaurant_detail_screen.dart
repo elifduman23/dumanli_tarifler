@@ -71,8 +71,12 @@ class _RestaurantDetailScreenState extends State<RestaurantDetailScreen> {
                       fit: StackFit.expand,
                       children: [
                         Image.network(
-                          'https://images.deliveryhero.io/image/fd-tr/LH/v238-hero.jpg',
+                          _restaurantDetails?['logoUrl'] ?? 'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Image.network(
+                            'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         Container(
                           decoration: BoxDecoration(
