@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../services/location_service.dart';
 import 'favorites_screen.dart';
 import 'orders_screen.dart';
 import 'coupons_screen.dart';
@@ -30,14 +31,27 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late String _currentAddress;
-  final _provinceController = TextEditingController();
-  final _districtController = TextEditingController();
-  final _neighborhoodController = TextEditingController();
+  
+  // Lokasyon listeleri
+  List<dynamic> _provinces = [];
+  List<dynamic> _districts = [];
+  List<dynamic> _neighborhoods = [];
+  
+  // Seçilen ID'ler
+  int? _selectedProvinceId;
+  int? _selectedDistrictId;
+  int? _selectedNeighborhoodId;
 
   @override
   void initState() {
     super.initState();
     _currentAddress = widget.userAddress;
+    _loadProvinces();
+  }
+
+  Future<void> _loadProvinces() async {
+    final provinces = await LocationService.getProvinces();
+    if (mounted) setState(() => _provinces = provinces);
   }
 
   @override
@@ -208,74 +222,98 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isScrollControlled: true,
       backgroundColor: const Color(0xFF1E1E1E),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
-      builder: (context) => Padding(
-        padding: EdgeInsets.fromLTRB(25, 25, 25, MediaQuery.of(context).viewInsets.bottom + 25),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Yeni Adres Bilgileri', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            _buildTextField(_provinceController, 'İl (Örn: Malatya)', Icons.location_city),
-            const SizedBox(height: 15),
-            _buildTextField(_districtController, 'İlçe (Örn: Battalgazi)', Icons.map),
-            const SizedBox(height: 15),
-            _buildTextField(_neighborhoodController, 'Mahalle (Örn: Üniversite Mah.)', Icons.home),
-            const SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setModalState) => Padding(
+          padding: EdgeInsets.fromLTRB(25, 25, 25, MediaQuery.of(context).viewInsets.bottom + 25),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Yeni Adres Bilgileri', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              
+              // İL SEÇİMİ
+              _buildDropdown('İl Seçiniz', _provinces, _selectedProvinceId, (val) {
+                setModalState(() {
+                  _selectedProvinceId = val;
+                  _selectedDistrictId = null;
+                  _selectedNeighborhoodId = null;
+                });
+                LocationService.getDistricts(val!).then((res) => setModalState(() => _districts = res));
+              }),
+              
+              const SizedBox(height: 15),
+              
+              // İLÇE SEÇİMİ
+              if (_selectedProvinceId != null)
+                _buildDropdown('İlçe Seçiniz', _districts, _selectedDistrictId, (val) {
+                  setModalState(() {
+                    _selectedDistrictId = val;
+                    _selectedNeighborhoodId = null;
+                  });
+                  LocationService.getNeighborhoods(val!).then((res) => setModalState(() => _neighborhoods = res));
+                }),
+              
+              const SizedBox(height: 15),
+              
+              // MAHALLE SEÇİMİ
+              if (_selectedDistrictId != null)
+                _buildDropdown('Mahalle Seçiniz', _neighborhoods, _selectedNeighborhoodId, (val) {
+                  setModalState(() => _selectedNeighborhoodId = val);
+                }),
+              
+              const SizedBox(height: 30),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber,
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  ),
+                  onPressed: () => _saveAddress(setModalState),
+                  child: const Text('Adresi Kaydet', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                 ),
-                onPressed: _saveAddress,
-                child: const Text('Adresi Kaydet', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint, IconData icon) {
+  Widget _buildDropdown(String hint, List<dynamic> items, int? val, Function(int?) onChanged) {
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: TextField(
-        controller: controller,
-        style: const TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.white38),
-          prefixIcon: Icon(icon, color: Colors.amber, size: 20),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(15)),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<int>(
+          isExpanded: true,
+          hint: Text(hint, style: const TextStyle(color: Colors.grey)),
+          value: val,
+          onChanged: onChanged,
+          dropdownColor: const Color(0xFF1E1E1E),
+          items: items.map((item) => DropdownMenuItem<int>(value: item['id'], child: Text(item['name'], style: const TextStyle(color: Colors.white)))).toList(),
         ),
       ),
     );
   }
 
-  Future<void> _saveAddress() async {
-    if (_provinceController.text.isEmpty || _districtController.text.isEmpty || _neighborhoodController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lütfen tüm alanları doldurun.')));
+  Future<void> _saveAddress(StateSetter setModalState) async {
+    if (_selectedProvinceId == null || _selectedDistrictId == null || _selectedNeighborhoodId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lütfen tüm seçimleri yapın.')));
       return;
     }
 
-    final result = await ApiService.updateProfile(
-      widget.token,
-      _provinceController.text,
-      _districtController.text,
-      _neighborhoodController.text,
-    );
+    String pName = _provinces.firstWhere((p) => p['id'] == _selectedProvinceId)['name'];
+    String dName = _districts.firstWhere((d) => d['id'] == _selectedDistrictId)['name'];
+    String nName = _neighborhoods.firstWhere((n) => n['id'] == _selectedNeighborhoodId)['name'];
+
+    final result = await ApiService.updateProfile(widget.token, pName, dName, nName);
 
     if (result['success']) {
       setState(() {
-        _currentAddress = '${_provinceController.text} / ${_districtController.text} / ${_neighborhoodController.text}';
+        _currentAddress = '$nName $dName / $pName';
       });
       if (mounted) {
         Navigator.pop(context);
