@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -73,6 +74,26 @@ namespace YemekSiparisi.Api.Controllers
             });
         }
 
+        // PROFİL GÜNCELLE (Adres vb.)
+        [HttpPatch("update-profile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile([FromBody] UserUpdateDto request)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out int userId)) return Unauthorized();
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return NotFound("Kullanıcı bulunamadı.");
+
+            if (!string.IsNullOrEmpty(request.Province)) user.Province = request.Province;
+            if (!string.IsNullOrEmpty(request.District)) user.District = request.District;
+            if (!string.IsNullOrEmpty(request.Neighborhood)) user.Neighborhood = request.Neighborhood;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Profil başarıyla güncellendi.", Province = user.Province, District = user.District, Neighborhood = user.Neighborhood });
+        }
+
         private string GenerateJwtToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -115,5 +136,12 @@ namespace YemekSiparisi.Api.Controllers
     {
         public string Email { get; set; }
         public string Password { get; set; }
+    }
+
+    public class UserUpdateDto
+    {
+        public string? Province { get; set; }
+        public string? District { get; set; }
+        public string? Neighborhood { get; set; }
     }
 }

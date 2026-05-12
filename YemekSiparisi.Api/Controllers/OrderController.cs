@@ -83,6 +83,21 @@ namespace YemekSiparisi.Api.Controllers
 
             return Ok(orders);
         }
+
+        // TÜM SİPARİŞLERİ GETİR (Admin Paneli İçin)
+        [HttpGet("all-orders")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = await _context.Orders
+                .Include(o => o.Restaurant)
+                .Include(o => o.User)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.MenuItem)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+
+            return Ok(orders);
+        }
         // Sipariş durumunu güncelle (Admin veya Restoran Sahibi için)
         [HttpPatch("{orderId}/status")]
         public async Task<IActionResult> UpdateStatus(int orderId, [FromBody] string newStatus)

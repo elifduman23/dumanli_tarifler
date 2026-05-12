@@ -8,10 +8,7 @@ class ApiService {
     if (kIsWeb) return 'http://localhost:5000/api';
     
     // NOT: Kendi telefonunda denemek istersen aşağıdaki ngrok satırını açabilirsin.
-    // return 'https://unsent-ruckus-icy.ngrok-free.dev/api'; 
-
-    if (Platform.isAndroid) return 'http://10.0.2.2:5000/api';
-    return 'http://localhost:5000/api';
+    return 'https://unsent-ruckus-icy.ngrok-free.dev/api'; 
   }
   static String get authUrl => '$baseUrl/auth';
 
@@ -58,6 +55,32 @@ class ApiService {
         return {'success': true, 'data': jsonDecode(response.body)};
       } else {
         return {'success': false, 'message': 'E-posta veya şifre hatalı.'};
+      }
+    } catch (e) {
+      return {'success': false, 'message': 'Bağlantı hatası: $e'};
+    }
+  }
+
+  // PROFİL GÜNCELLE
+  static Future<Map<String, dynamic>> updateProfile(String token, String? province, String? district, String? neighborhood) async {
+    try {
+      final response = await http.patch(
+        Uri.parse('$authUrl/update-profile'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'Province': province,
+          'District': district,
+          'Neighborhood': neighborhood
+        }),
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return {'success': true, 'data': jsonDecode(response.body)};
+      } else {
+        return {'success': false, 'message': 'Profil güncellenemedi.'};
       }
     } catch (e) {
       return {'success': false, 'message': 'Bağlantı hatası: $e'};
@@ -147,6 +170,46 @@ class ApiService {
     }
   }
 
+  // TÜM SİPARİŞLERİ GETİR (ADMIN)
+  static Future<List<dynamic>> getAllOrders(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/Order/all-orders'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      print('Tüm siparişler hatası: $e');
+      return [];
+    }
+  }
+
+  // SİPARİŞ DURUMUNU GÜNCELLE (ADMIN)
+  static Future<bool> updateOrderStatus(int orderId, String status, String token) async {
+    try {
+      final response = await http.patch(
+        Uri.parse('$baseUrl/Order/$orderId/status'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(status),
+      ).timeout(const Duration(seconds: 10));
+
+      return response.statusCode == 200;
+    } catch (e) {
+      print('Durum güncelleme hatası: $e');
+      return false;
+    }
+  }
+
   // KATEGORİYE GÖRE YEMEK GETİR
   static Future<List<dynamic>> getMenuItemsByCategory(String category) async {
     try {
@@ -221,22 +284,4 @@ class ApiService {
     }
   }
 
-  // SİPARİŞ DURUMUNU GÜNCELLE (ADMIN)
-  static Future<bool> updateOrderStatus(int orderId, String status, String token) async {
-    try {
-      final response = await http.patch(
-        Uri.parse('$baseUrl/Order/$orderId/status'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode(status),
-      ).timeout(const Duration(seconds: 10));
-
-      return response.statusCode == 200;
-    } catch (e) {
-      print('Sipariş güncelleme hatası: $e');
-      return false;
-    }
-  }
 }

@@ -29,16 +29,42 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _fetchData() async {
-    final restaurants = await ApiService.getRestaurants();
-    final favorites = await ApiService.getFavorites(widget.token);
-    
-    if (mounted) {
-      setState(() {
-        _allRestaurants = restaurants;
-        _filteredRestaurants = restaurants;
-        _favoriteIds = favorites.map<int>((f) => f['id'] as int).toList();
-        _isLoading = false;
-      });
+    setState(() => _isLoading = true);
+    try {
+      final restaurants = await ApiService.getRestaurants();
+      final favorites = await ApiService.getFavorites(widget.token);
+      
+      if (mounted) {
+        setState(() {
+          _allRestaurants = restaurants;
+          _filteredRestaurants = restaurants;
+          _favoriteIds = favorites.map<int>((f) => f['id'] as int).toList();
+          _isLoading = false;
+          _searchController.clear();
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: 10),
+                Text('Menüler güncellendi!'),
+              ],
+            ),
+            backgroundColor: Colors.amber,
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Bağlantı hatası oluştu!'), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 
