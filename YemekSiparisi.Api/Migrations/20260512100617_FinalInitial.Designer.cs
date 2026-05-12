@@ -12,8 +12,8 @@ using YemekSiparisi.Api.Data;
 namespace YemekSiparisi.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260512100259_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260512100617_FinalInitial")]
+    partial class FinalInitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -342,7 +342,7 @@ namespace YemekSiparisi.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerId")
+                    b.Property<int?>("OwnerId")
                         .HasColumnType("int");
 
                     b.Property<double>("Rating")
@@ -359,66 +359,60 @@ namespace YemekSiparisi.Api.Migrations
                         {
                             Id = 1,
                             Address = "Çarşı Merkezi, No: 44",
-                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1873),
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7608),
                             Description = "En lezzetli kebaplar ve lahmacunlar.",
                             LogoUrl = "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500",
                             Name = "Gaziantep Kebapçısı",
-                            OwnerId = 1,
                             Rating = 4.7999999999999998
                         },
                         new
                         {
                             Id = 2,
                             Address = "Cumhuriyet Cad. No: 12",
-                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1896),
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7625),
                             Description = "Gerçek odun ateşinde İtalyan pizzası.",
                             LogoUrl = "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500",
                             Name = "İtalyan Pizza Dünyası",
-                            OwnerId = 1,
                             Rating = 4.5
                         },
                         new
                         {
                             Id = 3,
                             Address = "Bahçelievler Mah. No: 7",
-                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1900),
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7628),
                             Description = "Gurme burger ve özel soslar.",
                             LogoUrl = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500",
                             Name = "Dumanlı Burger",
-                            OwnerId = 1,
                             Rating = 4.7000000000000002
                         },
                         new
                         {
                             Id = 4,
                             Address = "Kanalboyu Cad. No: 21",
-                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1904),
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7632),
                             Description = "Geleneksel ve modern tatlılar.",
                             LogoUrl = "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500",
                             Name = "Tatlı Köşesi",
-                            OwnerId = 1,
                             Rating = 4.9000000000000004
                         },
                         new
                         {
                             Id = 5,
                             Address = "Fahri Kayahan No: 88",
-                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1907),
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7634),
                             Description = "Taze balık ve deniz mahsulleri.",
                             LogoUrl = "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500",
                             Name = "Ege Deniz Restoran",
-                            OwnerId = 1,
                             Rating = 4.5999999999999996
                         },
                         new
                         {
                             Id = 6,
                             Address = "İnönü Cad. No: 156",
-                            CreatedAt = new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1911),
+                            CreatedAt = new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7637),
                             Description = "Sağlıklı salatalar ve vegan seçenekler.",
                             LogoUrl = "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500",
                             Name = "Yeşil Bahçe",
-                            OwnerId = 1,
                             Rating = 4.4000000000000004
                         });
                 });
@@ -462,20 +456,6 @@ namespace YemekSiparisi.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2026, 5, 12, 10, 2, 59, 95, DateTimeKind.Utc).AddTicks(1400),
-                            District = "Battalgazi",
-                            Email = "admin@dumanli.com",
-                            FullName = "Sistem Yöneticisi",
-                            Neighborhood = "Üniversite",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJ3y...",
-                            Province = "Malatya",
-                            Role = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("YemekSiparisi.Api.Models.Coupon", b =>
@@ -561,9 +541,7 @@ namespace YemekSiparisi.Api.Migrations
                 {
                     b.HasOne("YemekSiparisi.Api.Models.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OwnerId");
 
                     b.Navigation("Owner");
                 });

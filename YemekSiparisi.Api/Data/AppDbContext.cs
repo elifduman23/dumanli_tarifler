@@ -68,29 +68,14 @@ namespace YemekSiparisi.Api.Data
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // SEED DATA (Hoca için hazır veriler)
-            // Not: Once kullaniciyi ekliyoruz ki restoranlar ona baglanabilsin.
-            modelBuilder.Entity<User>().HasData(
-                new User 
-                { 
-                    Id = 1, 
-                    FullName = "Sistem Yöneticisi", 
-                    Email = "admin@dumanli.com", 
-                    PasswordHash = "AQAAAAEAACcQAAAAEJ3y...", // admin123 hashed
-                    Role = "Admin",
-                    Province = "Malatya",
-                    District = "Battalgazi",
-                    Neighborhood = "Üniversite"
-                }
-            );
-
+            // SEED DATA (Zengin Restoran ve Menü Listesi)
             modelBuilder.Entity<Restaurant>().HasData(
-                new Restaurant { Id = 1, Name = "Gaziantep Kebapçısı", Description = "En lezzetli kebaplar ve lahmacunlar.", Address = "Çarşı Merkezi, No: 44", Rating = 4.8, LogoUrl = "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500", CreatedAt = System.DateTime.Now, OwnerId = 1 },
-                new Restaurant { Id = 2, Name = "İtalyan Pizza Dünyası", Description = "Gerçek odun ateşinde İtalyan pizzası.", Address = "Cumhuriyet Cad. No: 12", Rating = 4.5, LogoUrl = "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500", CreatedAt = System.DateTime.Now, OwnerId = 1 },
-                new Restaurant { Id = 3, Name = "Dumanlı Burger", Description = "Gurme burger ve özel soslar.", Address = "Bahçelievler Mah. No: 7", Rating = 4.7, LogoUrl = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500", CreatedAt = System.DateTime.Now, OwnerId = 1 },
-                new Restaurant { Id = 4, Name = "Tatlı Köşesi", Description = "Geleneksel ve modern tatlılar.", Address = "Kanalboyu Cad. No: 21", Rating = 4.9, LogoUrl = "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500", CreatedAt = System.DateTime.Now, OwnerId = 1 },
-                new Restaurant { Id = 5, Name = "Ege Deniz Restoran", Description = "Taze balık ve deniz mahsulleri.", Address = "Fahri Kayahan No: 88", Rating = 4.6, LogoUrl = "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500", CreatedAt = System.DateTime.Now, OwnerId = 1 },
-                new Restaurant { Id = 6, Name = "Yeşil Bahçe", Description = "Sağlıklı salatalar ve vegan seçenekler.", Address = "İnönü Cad. No: 156", Rating = 4.4, LogoUrl = "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500", CreatedAt = System.DateTime.Now, OwnerId = 1 }
+                new Restaurant { Id = 1, Name = "Gaziantep Kebapçısı", Description = "En lezzetli kebaplar ve lahmacunlar.", Address = "Çarşı Merkezi, No: 44", Rating = 4.8, LogoUrl = "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500", CreatedAt = System.DateTime.Now, OwnerId = null },
+                new Restaurant { Id = 2, Name = "İtalyan Pizza Dünyası", Description = "Gerçek odun ateşinde İtalyan pizzası.", Address = "Cumhuriyet Cad. No: 12", Rating = 4.5, LogoUrl = "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500", CreatedAt = System.DateTime.Now, OwnerId = null },
+                new Restaurant { Id = 3, Name = "Dumanlı Burger", Description = "Gurme burger ve özel soslar.", Address = "Bahçelievler Mah. No: 7", Rating = 4.7, LogoUrl = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500", CreatedAt = System.DateTime.Now, OwnerId = null },
+                new Restaurant { Id = 4, Name = "Tatlı Köşesi", Description = "Geleneksel ve modern tatlılar.", Address = "Kanalboyu Cad. No: 21", Rating = 4.9, LogoUrl = "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500", CreatedAt = System.DateTime.Now, OwnerId = null },
+                new Restaurant { Id = 5, Name = "Ege Deniz Restoran", Description = "Taze balık ve deniz mahsulleri.", Address = "Fahri Kayahan No: 88", Rating = 4.6, LogoUrl = "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500", CreatedAt = System.DateTime.Now, OwnerId = null },
+                new Restaurant { Id = 6, Name = "Yeşil Bahçe", Description = "Sağlıklı salatalar ve vegan seçenekler.", Address = "İnönü Cad. No: 156", Rating = 4.4, LogoUrl = "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500", CreatedAt = System.DateTime.Now, OwnerId = null }
             );
 
             modelBuilder.Entity<MenuItem>().HasData(

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace YemekSiparisi.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class FinalInitial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,7 +69,7 @@ namespace YemekSiparisi.Api.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false),
-                    OwnerId = table.Column<int>(type: "int", nullable: false),
+                    OwnerId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -79,8 +79,7 @@ namespace YemekSiparisi.Api.Migrations
                         name: "FK_Restaurants_Users_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -194,21 +193,16 @@ namespace YemekSiparisi.Api.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "CreatedAt", "District", "Email", "FullName", "Neighborhood", "PasswordHash", "Province", "Role" },
-                values: new object[] { 1, new DateTime(2026, 5, 12, 10, 2, 59, 95, DateTimeKind.Utc).AddTicks(1400), "Battalgazi", "admin@dumanli.com", "Sistem Yöneticisi", "Üniversite", "AQAAAAEAACcQAAAAEJ3y...", "Malatya", "Admin" });
-
-            migrationBuilder.InsertData(
                 table: "Restaurants",
                 columns: new[] { "Id", "Address", "CreatedAt", "Description", "LogoUrl", "Name", "OwnerId", "Rating" },
                 values: new object[,]
                 {
-                    { 1, "Çarşı Merkezi, No: 44", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1873), "En lezzetli kebaplar ve lahmacunlar.", "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500", "Gaziantep Kebapçısı", 1, 4.7999999999999998 },
-                    { 2, "Cumhuriyet Cad. No: 12", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1896), "Gerçek odun ateşinde İtalyan pizzası.", "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500", "İtalyan Pizza Dünyası", 1, 4.5 },
-                    { 3, "Bahçelievler Mah. No: 7", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1900), "Gurme burger ve özel soslar.", "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500", "Dumanlı Burger", 1, 4.7000000000000002 },
-                    { 4, "Kanalboyu Cad. No: 21", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1904), "Geleneksel ve modern tatlılar.", "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500", "Tatlı Köşesi", 1, 4.9000000000000004 },
-                    { 5, "Fahri Kayahan No: 88", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1907), "Taze balık ve deniz mahsulleri.", "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500", "Ege Deniz Restoran", 1, 4.5999999999999996 },
-                    { 6, "İnönü Cad. No: 156", new DateTime(2026, 5, 12, 13, 2, 59, 95, DateTimeKind.Local).AddTicks(1911), "Sağlıklı salatalar ve vegan seçenekler.", "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500", "Yeşil Bahçe", 1, 4.4000000000000004 }
+                    { 1, "Çarşı Merkezi, No: 44", new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7608), "En lezzetli kebaplar ve lahmacunlar.", "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500", "Gaziantep Kebapçısı", null, 4.7999999999999998 },
+                    { 2, "Cumhuriyet Cad. No: 12", new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7625), "Gerçek odun ateşinde İtalyan pizzası.", "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500", "İtalyan Pizza Dünyası", null, 4.5 },
+                    { 3, "Bahçelievler Mah. No: 7", new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7628), "Gurme burger ve özel soslar.", "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500", "Dumanlı Burger", null, 4.7000000000000002 },
+                    { 4, "Kanalboyu Cad. No: 21", new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7632), "Geleneksel ve modern tatlılar.", "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500", "Tatlı Köşesi", null, 4.9000000000000004 },
+                    { 5, "Fahri Kayahan No: 88", new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7634), "Taze balık ve deniz mahsulleri.", "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500", "Ege Deniz Restoran", null, 4.5999999999999996 },
+                    { 6, "İnönü Cad. No: 156", new DateTime(2026, 5, 12, 13, 6, 16, 606, DateTimeKind.Local).AddTicks(7637), "Sağlıklı salatalar ve vegan seçenekler.", "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500", "Yeşil Bahçe", null, 4.4000000000000004 }
                 });
 
             migrationBuilder.InsertData(

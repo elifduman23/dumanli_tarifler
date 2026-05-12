@@ -12,8 +12,8 @@ namespace YemekSiparisi.Api.Models
         public string LogoUrl { get; set; }
         public double Rating { get; set; } = 0.0;
         
-        public int OwnerId { get; set; }
-        public User Owner { get; set; }
+        public int? OwnerId { get; set; }
+        public User? Owner { get; set; }
         
         public List<MenuItem> MenuItems { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
