@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   IconButton(
                                     icon: const Icon(Icons.notifications_none, color: Colors.amber),
-                                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationsScreen())),
+                                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationsScreen(token: widget.token))),
                                   ),
                                 ],
                               ),

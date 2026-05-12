@@ -285,4 +285,66 @@ class ApiService {
     }
   }
 
+  // TÜM KULLANICILARI GETİR (ADMIN)
+  static Future<List<dynamic>> getAllUsers(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/Admin/users'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      print('Tüm kullanıcılar hatası: $e');
+      return [];
+    }
+  }
+
+  // SİSTEM İSTATİSTİKLERİNİ GETİR (ADMIN)
+  static Future<Map<String, dynamic>> getAdminStats(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/Admin/stats'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return {};
+    } catch (e) {
+      print('İstatistik hatası: $e');
+      return {};
+    }
+  }
+
+  // BİLDİRİMLERİ GETİR
+  static Future<List<dynamic>> getNotifications(String token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/Notification'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+      return [];
+    } catch (e) {
+      print('Bildirim hatası: $e');
+      return [];
+    }
+  }
 }

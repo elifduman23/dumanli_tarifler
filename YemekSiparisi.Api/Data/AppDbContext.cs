@@ -16,6 +16,7 @@ namespace YemekSiparisi.Api.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

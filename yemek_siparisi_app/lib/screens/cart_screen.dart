@@ -14,6 +14,7 @@ class _CartScreenState extends State<CartScreen> {
   final _couponController = TextEditingController();
   double _discountAmount = 0;
   String? _appliedCoupon;
+  bool _isOrdering = false;
 
   @override
   Widget build(BuildContext context) {

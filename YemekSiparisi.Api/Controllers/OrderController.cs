@@ -84,6 +84,17 @@ namespace YemekSiparisi.Api.Controllers
             order.TotalAmount = totalAmount;
 
             _context.Orders.Add(order);
+            
+            // BİLDİRİM EKLE
+            var notification = new Notification
+            {
+                UserId = userId,
+                Title = "Sipariş Alındı 🥘",
+                Message = "Siparişiniz başarıyla mutfağa ulaştı. Hazırlanmaya başlıyor!",
+                CreatedAt = DateTime.Now
+            };
+            _context.Notifications.Add(notification);
+
             await _context.SaveChangesAsync();
 
             return Ok(new { 
@@ -129,10 +140,35 @@ namespace YemekSiparisi.Api.Controllers
         [HttpPatch("{orderId}/status")]
         public async Task<IActionResult> UpdateStatus(int orderId, [FromBody] string newStatus)
         {
-            var order = await _context.Orders.FindAsync(orderId);
+            var order = await _context.Orders
+                .Include(o => o.Restaurant)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+                
             if (order == null) return NotFound("Sipariş bulunamadı.");
 
             order.Status = newStatus;
+
+            // BİLDİRİM EKLE
+            string title = "Sipariş Durumu Güncellendi 🔔";
+            string message = $"Siparişiniz şu an: {newStatus}";
+
+            if (newStatus == "Yolda") {
+                title = "Siparişin Yola Çıktı! 🛵";
+                message = $"{order.Restaurant?.Name} siparişini kuryeye teslim etti. Çok yakında kapında!";
+            } else if (newStatus == "Teslim Edildi") {
+                title = "Afiyet Olsun! 😋";
+                message = "Siparişin başarıyla teslim edildi. Bizi tercih ettiğin için teşekkürler!";
+            }
+
+            var notification = new Notification
+            {
+                UserId = order.UserId,
+                Title = title,
+                Message = message,
+                CreatedAt = DateTime.Now
+            };
+            _context.Notifications.Add(notification);
+
             await _context.SaveChangesAsync();
 
             return Ok(new { Message = "Sipariş durumu güncellendi.", Status = newStatus });
