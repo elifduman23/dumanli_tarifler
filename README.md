@@ -1,4 +1,4 @@
-# Yemek Siparişi Uygulaması (Dumanlı Tarifler)
+# Dumanlı Tarifler - Yemek Siparişi Uygulaması
 
 Bu proje, bir AI Koordinatörlüğü başvurusu için geliştirilmiş tam kapsamlı (Full-Stack) bir yemek siparişi uygulamasıdır.
 
