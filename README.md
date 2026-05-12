@@ -1,6 +1,6 @@
 # Dumanlı Tarifler - Yemek Siparişi Uygulaması
 
-Bu proje, bir AI Koordinatörlüğü başvurusu için geliştirilmiş tam kapsamlı (Full-Stack) bir yemek siparişi uygulamasıdır.
+Bu proje, tam kapsamlı (Full-Stack) bir yemek siparişi uygulamasıdır.
 
 ## Proje Yapısı
 
