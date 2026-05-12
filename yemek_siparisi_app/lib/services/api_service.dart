@@ -6,6 +6,10 @@ import 'package:http/http.dart' as http;
 class ApiService {
   static String get baseUrl {
     if (kIsWeb) return 'http://localhost:5000/api';
+    
+    // NOT: Kendi telefonunda denemek istersen aşağıdaki ngrok satırını açabilirsin.
+    // return 'https://unsent-ruckus-icy.ngrok-free.dev/api'; 
+
     if (Platform.isAndroid) return 'http://10.0.2.2:5000/api';
     return 'http://localhost:5000/api';
   }
